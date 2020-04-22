@@ -17,6 +17,7 @@
     "@handlebars/allow-prototype-access": "^1.0.3",
     "express": "^4.17.1",
     "express-handlebars": "^4.0.3",
+    "express-session": "^1.17.1",
     "mongoose": "^5.9.9",
     "mongoose-lean-virtuals": "^0.6.1",
     "uuid": "^7.0.3"
