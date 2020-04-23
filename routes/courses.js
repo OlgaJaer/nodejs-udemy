@@ -1,12 +1,13 @@
 const { Router } = require("express");
 const Course = require("../models/course");
+const auth = require("../middleware/auth");
 const router = Router();
 //const mongooseLV = require('mongoose-lean-virtuals');
 //Course.plugin(mongooseLV);
 
 router.get("/", async (req, res) => {
-  const courses = await Course.find().lean().populate('userId', 'email name');
-  console.log(courses)
+  const courses = await Course.find().lean().populate("userId", "email name");
+  console.log(courses);
   res.render("courses", {
     title: "List of corses",
     isCourses: true,
@@ -14,7 +15,7 @@ router.get("/", async (req, res) => {
   });
 });
 
-router.post("/edit", async (req, res) => {
+router.post("/edit", auth, async (req, res) => {
   const { id } = req.body; //забираем id (в moongoose id как _id)
   delete req.body.id; //удаляем id из body
   await Course.findByIdAndUpdate(id, req.body).lean();
@@ -22,22 +23,22 @@ router.post("/edit", async (req, res) => {
   res.redirect("/courses");
 });
 
-router.post("/remove", async (req, res) => {
+router.post("/remove", auth, async (req, res) => {
   try {
-    await Course.deleteOne({_id: req.body.id});
-    res.redirect('/courses')
+    await Course.deleteOne({ _id: req.body.id });
+    res.redirect("/courses");
   } catch (e) {
     console.log(e);
   }
 });
 
-router.get("/:id/edit", async (req, res) => {
+router.get("/:id/edit", auth, async (req, res) => {
   if (!req.query.allow) {
     return res.redirect("/");
   }
 
   const course = await Course.findById(req.params.id).lean();
-  console.log("ID", req.params.id)
+  console.log("ID", req.params.id);
   res.render("course-edit", {
     title: `Редактировать ${course.title}`,
     course,
