@@ -20,7 +20,7 @@ document.querySelectorAll(".price").forEach((node) => {
   node.textContent = toCurrency(node.textContent);
 });
 
-document.querySelectorAll('.date').forEach((node) => {
+document.querySelectorAll(".date").forEach((node) => {
   node.textContent = toDate(node.textContent);
 });
 
@@ -29,9 +29,13 @@ if ($card) {
   $card.addEventListener("click", (e) => {
     if (e.target.classList.contains("js-remove")) {
       const id = e.target.dataset.id;
+      const csrf = e.target.dataset.csrf;
 
       fetch("/card/remove/" + id, {
         method: "delete",
+        headers: {
+          "X-XSRF-TOKEN": csrf,
+        },
       })
         .then((res) => res.json())
         .then((card) => {
@@ -61,4 +65,4 @@ if ($card) {
   });
 }
 
-M.Tabs.init(document.querySelectorAll('.tabs'));
+M.Tabs.init(document.querySelectorAll(".tabs"));
