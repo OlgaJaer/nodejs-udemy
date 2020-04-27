@@ -18,6 +18,7 @@ const ordersRouts = require("./routes/orders");
 const coursesRoutes = require("./routes/courses");
 const varMiddleware = require("./middleware/variables");
 const userMiddleware = require("./middleware/user");
+const errorHandler = require('./middleware/error')
 const keys = require('./keys')
 //const MONGODB_URI = `mongodb+srv://olga:ZgS8wUdBef2SIMBm@cluster0-dwk9a.mongodb.net/shop?retryWrites=true&w=majority`;
 const app = express();
@@ -52,12 +53,15 @@ app.use(flash())             //добавить после сессии
 app.use(varMiddleware);
 app.use(userMiddleware);
 
+
 app.use("/", homeRoutes);
 app.use("/add", addRoutes);
 app.use("/courses", coursesRoutes);
 app.use("/card", cardRoutes);
 app.use("/orders", ordersRouts);
 app.use("/auth", authRoutes);
+
+app.use(errorHandler); //после всех роутов
 
 const PORT = process.env.PORT || 3000;
 
