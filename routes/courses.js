@@ -1,6 +1,8 @@
 const { Router } = require("express");
+const { validationResult } = require("express-validator");
 const Course = require("../models/course");
 const auth = require("../middleware/auth");
+const {courseValidators} = require("../utils/validators");
 const router = Router();
 
 function isOwner(course, req) {
@@ -22,9 +24,15 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/edit", auth, async (req, res) => {
-  try {
-    const { id } = req.body; //забираем id (в moongoose id как _id)
+router.post("/edit", auth, courseValidators, async (req, res) => {
+const errors = validationResult(req)
+const { id } = req.body; //забираем id (в moongoose id как _id)
+
+if (!errors.isEmpty()) {
+  return res.status(422).redirect(`/courses/${id}/edit?allow=true`)
+}
+
+  try { 
     delete req.body.id; //удаляем id из body
 
     const course = await Course.findById(id);

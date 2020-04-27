@@ -64,8 +64,8 @@ router.post("/login", async (req, res) => {
 
 router.post("/register", registerValidators, async (req, res) => {
   try {
-    const { email, password, confirm, name } = req.body;
-    const candidate = await User.findOne({ email });
+    const { email, password, name } = req.body;
+    //const candidate = await User.findOne({ email });
 
     const errors = validationResult(req);
 
@@ -74,10 +74,10 @@ router.post("/register", registerValidators, async (req, res) => {
       return res.status(422).redirect("/auth/login#register"); // 422- ошибки в валидации
     }
 
-    if (candidate) {
-      req.flash("registerError", "Пользователь с таким емайл уже существует");
-      res.redirect("/auth/login#register");
-    } else {
+    // if (candidate) {
+    //   req.flash("registerError", "Пользователь с таким емайл уже существует");
+    //   res.redirect("/auth/login#register");
+    // } else {
       const hashPasswort = await bcrypt.hash(password, 10);
       const user = new User({
         email,
@@ -88,7 +88,7 @@ router.post("/register", registerValidators, async (req, res) => {
       await user.save();
       res.redirect("/auth/login#login");
       await transporter.sendMail(regEmail(email)); // возвращает промис
-    }
+    //}
   } catch (error) {
     console.log(error);
   }
