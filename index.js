@@ -3,6 +3,8 @@ const path = require("path");
 const csrf = require("csurf");
 const flash = require("connect-flash");
 const mongoose = require("mongoose");
+const helmet = require("helmet");
+const compression = require("compression");
 const Handlebars = require("handlebars");
 const exphbs = require("express-handlebars");
 const {
@@ -54,6 +56,8 @@ app.use(
 app.use(fileMiddleware.single("avatar")); //подключить до csrf
 app.use(csrf());
 app.use(flash()); //добавить после сессии
+app.use(helmet());
+app.use(compression());
 app.use(varMiddleware);
 app.use(userMiddleware);
 
