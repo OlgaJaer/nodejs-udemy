@@ -69,7 +69,7 @@ app.use("/orders", ordersRouts);
 app.use("/auth", authRoutes);
 app.use("/profile", profileRoutes);
 
-app.use(errorHandler); //после всех роутов
+//app.use(errorHandler); //после всех роутов
 
 const PORT = process.env.PORT || 3000;
 

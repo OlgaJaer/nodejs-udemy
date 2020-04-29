@@ -86,8 +86,8 @@ router.post("/register", registerValidators, async (req, res) => {
         cart: { items: [] }, // ключи и значения совпадают
       });
       await user.save();
-      res.redirect("/auth/login#login");
       await transporter.sendMail(regEmail(email)); // возвращает промис
+      res.redirect("/auth/login#login");
     //}
   } catch (error) {
     console.log(error);
@@ -102,6 +102,7 @@ router.get("/reset", (req, res) => {
 });
 
 router.get("/password/:token", async (req, res) => {
+  
   if (!req.params.token) {
     return res.redirect("/auth/login");
   }
@@ -114,7 +115,7 @@ router.get("/password/:token", async (req, res) => {
 
     if (!user) {
       return res.redirect("/auth/login");
-    }
+    } else {
 
     res.render("auth/password", {
       title: "Восстановить доступ",
@@ -122,6 +123,7 @@ router.get("/password/:token", async (req, res) => {
       userId: user._id.toString(),
       token: req.params.token,
     });
+  }
   } catch (error) {
     console.log(error);
   }
@@ -141,6 +143,7 @@ router.post("/reset", (req, res) => {
 
       if (candidate) {
         candidate.resetToken = token;
+    
         candidate.resetTokenExp = Date.now() + 60 * 60 * 1000; // 1 hour in ms
         await candidate.save();
         await transporter.sendMail(resetEmail(candidate.email, token));
@@ -156,6 +159,7 @@ router.post("/reset", (req, res) => {
 });
 
 router.post("/password", async (req, res) => {
+
   try {
     const user = await User.findOne({
       _id: req.body.userId,

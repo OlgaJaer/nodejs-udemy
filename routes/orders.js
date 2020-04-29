@@ -36,7 +36,7 @@ router.post("/", auth, async (req, res) => {
       course: { ...i.courseId._doc }, //разворачиваем обьект
     }));
 
-    console.log("req", req.user);
+    //console.log("req", req.user);
     const order = new Order({
       user: {
         name: req.user.name,

@@ -7,7 +7,7 @@ exports.registerValidators = [
     .withMessage("Введите корректный емайл")
     .custom(async (value, { req }) => {
       try {
-        const user = new User.findOne({ email: value });
+        const user = User.findOne({ email: value });
         if (user) {
           return Promise.reject("Этот емайл уже занят");
         }

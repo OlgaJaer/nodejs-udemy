@@ -12,7 +12,7 @@ function isOwner(course, req) {
 router.get("/", async (req, res) => {
   try {
     const courses = await Course.find().lean().populate("userId", "email name");
-    console.log(courses);
+    //console.log(courses);
     res.render("courses", {
       title: "List of corses",
       isCourses: true,
@@ -51,7 +51,7 @@ if (!errors.isEmpty()) {
 
 router.post("/remove", auth, async (req, res) => {
   try {
-    console.log("req", req.body);
+    //console.log("req", req.body);
     await Course.deleteOne({
       _id: req.body.id,
       userId: req.user._id,
